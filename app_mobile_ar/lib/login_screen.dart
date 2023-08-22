@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -28,7 +29,8 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 200.0, bottom: 200.0, left: 20.0, right: 20.0),
+          padding: const EdgeInsets.only(
+              top: 200.0, bottom: 200.0, left: 20.0, right: 20.0),
           child: Container(
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -76,20 +78,25 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Container(
-                    height: 50,
-                    width: 300,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        gradient: const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Color(0xFF0B89B0), Color(0xFF000000)])),
-                            child: const Center(child: Text('SIGN IN', style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28,
-                              color: Colors.white
-                            ),),),
+                  GestureDetector(
+                    onTap: requestGetCredentialsUser,
+                    child: Container(
+                      height: 50,
+                      width: 300,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          gradient: const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Color(0xFF0B89B0), Color(0xFF000000)])),
+                      child: const Text(
+                        'SIGN IN',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                            color: Colors.white),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -99,4 +106,10 @@ class LoginScreen extends StatelessWidget {
       ],
     ));
   }
+
+  void requestGetCredentialsUser() {
+    showToastMessage('Edwin');
+  }
+
+  void showToastMessage(String message) => Fluttertoast.showToast(msg: message);
 }
