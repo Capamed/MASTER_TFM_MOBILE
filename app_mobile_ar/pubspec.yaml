@@ -10,7 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fluttertoast: ^8.1.2
+  fluttertoast: ^8.2.2
+  api_cache_manager: ^1.0.2
+  snippet_coder_utils: ^1.0.9
 
 dev_dependencies:
   flutter_test:
