@@ -10,7 +10,7 @@ class AuthenticationAPI {
   AuthenticationAPI(this._http);
   final Http _http;
 
-  Future<Either<SignInFailure, bool>> authenticationUser(
+  Future<Either<SignInFailure, String>> authenticationUser(
       {required String username, required String password}) async {
     final result = await _http.request('users/validateUser',
         method: HttpMethod.post,
@@ -32,9 +32,9 @@ class AuthenticationAPI {
       }
       return Either.left(SignInFailure.unknown);
     }, (responseBody) {
-      final value =jsonDecode(responseBody);
+      final value = jsonDecode(responseBody);
       if (value['user'] != null) {
-        return Either.right(true);
+        return Either.right(value['user']['identificationNumber']);
       }else{
         return Either.left(SignInFailure.notFound);
       }

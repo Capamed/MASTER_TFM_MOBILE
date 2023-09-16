@@ -5,6 +5,6 @@ import '../models/user.dart';
 
 abstract class AuthenticationRepository {
   Future<User> getUserData();
-  Future<Either<SignInFailure, bool>> signIn(String username, String password);
+  Future<Either<SignInFailure, String>> signIn(String username, String password);
 }
 

@@ -16,7 +16,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<SignInFailure, bool>> signIn(
+  Future<Either<SignInFailure, String>> signIn(
       String username, String password) async {
     final response = await _authenticationAPI.authenticationUser(
         username: username, password: password);
