@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../routes/routes.dart';
+
 class HomeView extends StatelessWidget {
   const HomeView({super.key, required this.identificationNumber});
 
@@ -33,40 +35,46 @@ class HomeView extends StatelessWidget {
                   Flexible(
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: MaterialButton(
-                        onPressed: () {},
-                        color: Colors.white.withOpacity(0.7),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.medication,
-                                color: Color.fromARGB(255, 133, 129, 129),
-                                size: 35,
+                      child: Builder(
+                        builder: (context) {
+                          return MaterialButton(
+                            onPressed: () {
+                              _goToRegisterMedication(context);
+                            },
+                            color: Colors.white.withOpacity(0.7),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: const BorderSide(
+                                color: Colors.black,
+                                width: 2.0,
                               ),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  'REGISTER \n MEDICATION',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.medication,
+                                    color: Color.fromARGB(255, 133, 129, 129),
+                                    size: 35,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'REGISTER \n MEDICATION',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        }
                       ),
                     ),
                   ),
@@ -157,5 +165,9 @@ class HomeView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _goToRegisterMedication(BuildContext context){
+    Navigator.pushReplacementNamed(context, Routes.REGISTER_MEDICATION, arguments: '1718302951');
   }
 }
