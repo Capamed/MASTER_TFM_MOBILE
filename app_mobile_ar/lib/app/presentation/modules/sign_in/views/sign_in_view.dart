@@ -223,7 +223,7 @@ class _SignInViewState extends State<SignInView> {
     setState(() {
       _fetching = true;
     });
-    Navigator.pushReplacementNamed(context, Routes.HOME, arguments: '1718302951');
+    Navigator.pushReplacementNamed(context, Routes.HOME);
     // final result = await Injector.of(context)
     //     .authenticationRepository
     //     .signIn(_username, _password);

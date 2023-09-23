@@ -1,4 +1,9 @@
+import 'package:app_mobile_ar/app/domain/enums/enums.dart';
+import 'package:app_mobile_ar/app/presentation/modules/register_medication/widgets/doctors_list.dart';
 import 'package:flutter/material.dart';
+import 'package:app_mobile_ar/main.dart';
+
+import '../../../routes/routes.dart';
 
 class RegisterMedicationView extends StatefulWidget {
   const RegisterMedicationView({super.key, required this.identificationNumber});
@@ -10,20 +15,17 @@ class RegisterMedicationView extends StatefulWidget {
 }
 
 class _RegisterMedicationViewState extends State<RegisterMedicationView> {
-  @override
-  void initState() {
-    super.initState();
-    _getDataDoctors();
-    _getDataMedications();
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(widget.identificationNumber),
+    return const Scaffold(
+      body: SafeArea(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          DoctorsList(),
+        ],
+      )),
     );
   }
 
-  _getDataDoctors() {}
-  _getDataMedications() {}
 }
