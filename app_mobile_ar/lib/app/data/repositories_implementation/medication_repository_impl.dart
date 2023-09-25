@@ -13,12 +13,7 @@ class MedicationRepositoryImpl implements MedicationsRepository {
   
   @override
   Future<Either<SignInFailure, List<Medication>>> getDataMedications() async {
-    final response = await _medicationAPI.getDataMedication();
-    return response.when((failure) {
-      return Either.left(failure);
-    }, (medications) {
-      return Either.right(medications);
-    });
+    return _medicationAPI.getDataMedication();
   }
 
 

@@ -12,9 +12,8 @@ class MedicationAPI {
   final Http _http;
 
   Future<Either<SignInFailure, List<Medication>>> getDataMedication() async {
-    final result = await _http.request('medications/',
-        method: HttpMethod.get);
-     
+    final result = await _http.request('medications/', method: HttpMethod.get);
+
     return result.when((failure) {
       if (failure.statusCode != null) {
         switch (failure.statusCode!) {
@@ -32,7 +31,9 @@ class MedicationAPI {
       return Either.left(SignInFailure.unknown);
     }, (responseBody) {
       final value = jsonDecode(responseBody);
-      return Either.right(value);
+      final medications = value.map((json) => Medication.fromJson(json)).toList();
+      final List<Medication> medicationList = List<Medication>.from(medications);
+      return Either.right(medicationList);
     });
   }
 }

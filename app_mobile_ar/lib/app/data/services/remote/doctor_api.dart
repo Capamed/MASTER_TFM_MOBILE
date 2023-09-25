@@ -12,9 +12,7 @@ class DoctorAPI {
   final Http _http;
 
   Future<Either<SignInFailure, List<Doctor>>> getDataDoctor() async {
-    final result = await _http.request('doctors/',
-        method: HttpMethod.get);
-     
+    final result = await _http.request('doctors/', method: HttpMethod.get);
     return result.when((failure) {
       if (failure.statusCode != null) {
         switch (failure.statusCode!) {
@@ -32,7 +30,9 @@ class DoctorAPI {
       return Either.left(SignInFailure.unknown);
     }, (responseBody) {
       final value = jsonDecode(responseBody);
-      return Either.right(value);
+      final doctors = value.map((json) => Doctor.fromJson(json)).toList();
+      final List<Doctor> doctorList = List<Doctor>.from(doctors);
+      return Either.right(doctorList);
     });
   }
 }
