@@ -412,5 +412,6 @@ class _RegisterMedicationViewState extends State<RegisterMedicationView> {
     setState(() {
       _fetching = true;
     });
+    Navigator.pushReplacementNamed(context, Routes.HOME);
   }
 }

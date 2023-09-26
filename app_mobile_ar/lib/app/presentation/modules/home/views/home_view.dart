@@ -6,7 +6,7 @@ class HomeView extends StatelessWidget {
   const HomeView({super.key, required this.identificationNumber});
 
   final String identificationNumber;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,54 +35,54 @@ class HomeView extends StatelessWidget {
                   Flexible(
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: Builder(
-                        builder: (context) {
-                          return MaterialButton(
-                            onPressed: () {
-                              _goToRegisterMedication(context);
-                            },
-                            color: Colors.white.withOpacity(0.7),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: const BorderSide(
-                                color: Colors.black,
-                                width: 2.0,
-                              ),
+                      child: Builder(builder: (context) {
+                        return MaterialButton(
+                          onPressed: () {
+                            _goToRegisterMedication(context);
+                          },
+                          color: Colors.white.withOpacity(0.7),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: const BorderSide(
+                              color: Colors.black,
+                              width: 2.0,
                             ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.medication,
-                                    color: Color.fromARGB(255, 133, 129, 129),
-                                    size: 35,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      'REGISTER \n MEDICATION',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blue,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.medication,
+                                  color: Color.fromARGB(255, 133, 129, 129),
+                                  size: 35,
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'REGISTER \n MEDICATION',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
                                     ),
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          );
-                        }
-                      ),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                   Flexible(
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _goToShowRegisters(context);
+                        },
                         color: Colors.white.withOpacity(0.7),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -137,8 +137,8 @@ class HomeView extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.camera_alt_rounded,
-                                 color: Color.fromARGB(255, 133, 129, 129),
-                                 size: 35,
+                                color: Color.fromARGB(255, 133, 129, 129),
+                                size: 35,
                               ),
                               SizedBox(width: 8),
                               Expanded(
@@ -167,7 +167,13 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  _goToRegisterMedication(BuildContext context){
-    Navigator.pushReplacementNamed(context, Routes.REGISTER_MEDICATION, arguments: '1718302951');
+  _goToRegisterMedication(BuildContext context) {
+    Navigator.pushReplacementNamed(context, Routes.REGISTER_MEDICATION,
+        arguments: '1718302951');
+  }
+
+  _goToShowRegisters(BuildContext context) {
+    Navigator.pushReplacementNamed(context, Routes.SHOW_REGISTERS,
+        arguments: '1718302951');
   }
 }
