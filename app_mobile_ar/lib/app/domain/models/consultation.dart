@@ -1,14 +1,12 @@
 import 'package:app_mobile_ar/app/domain/models/doctor.dart';
 import 'package:app_mobile_ar/app/domain/models/medication.dart';
-import 'package:app_mobile_ar/app/domain/models/user.dart';
 
 class Consultation {
   final int consultationId;
-  final String schedule;
+  final int schedule;
   final String observation;
   final String symbol;
   final String status;
-  final User user;
   final String identificationNumberUser;
   final Doctor doctor;
   final Medication medication;
@@ -19,7 +17,6 @@ class Consultation {
       required this.observation,
       required this.symbol,
       required this.status,
-      required this.user,
       required this.identificationNumberUser,
       required this.doctor,
       required this.medication});
@@ -27,14 +24,13 @@ class Consultation {
   factory Consultation.fromJson(Map<String, dynamic> json) {
     return Consultation(
         consultationId: json['consultationId'] as int,
-        schedule: json['schedule'] as String,
+        schedule: json['schedule'] as int,
         observation: json['observation'] as String,
         symbol: json['symbol'] as String,
         status: json['status'] as String,
-        user: json['user'] as User,
         identificationNumberUser: json['identificationNumberUser'] as String, 
-        doctor: json['doctor'] as Doctor, 
-        medication: json['medication'] as Medication);
+        doctor: Doctor.fromJson(json['doctor']), 
+        medication: Medication.fromJson(json['medication']));
   }
 
   Map<String, dynamic> toJson() {
@@ -44,7 +40,6 @@ class Consultation {
       'observation': observation,
       'symbol': symbol,
       'status': status,
-      'user': user,
       'identificationNumberUser': identificationNumberUser,
       'doctor': doctor,
       'medication': medication

@@ -291,10 +291,7 @@ class _RegisterMedicationViewState extends State<RegisterMedicationView> {
                                       },
                                       decoration: const InputDecoration(
                                         hintText: 'Type schedule by hours',
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15.0)),
-                                        ),
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15.0)),),
                                       ),
                                       validator: (text) {
                                         text = text?.trim().toLowerCase() ?? '';
