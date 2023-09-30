@@ -24,10 +24,8 @@ class ShowRegistersView extends StatefulWidget {
 }
 
 class _ShowRegistersViewState extends State<ShowRegistersView> {
-  late final Future<EitherListConsultations> _futureConsultations;
   List<Consultation> lstConsultations = [];
-  bool _fetching = false;
-  bool _confirm = false;
+
   late final String _identificationNumber = widget.identificationNumber;
 
   @override
@@ -185,43 +183,38 @@ class _ShowRegistersViewState extends State<ShowRegistersView> {
                           IconButton(
                             icon: const Icon(Icons.edit),
                             onPressed: () {
-                              if (_fetching) {
-                                const CircularProgressIndicator();
-                              }
                               _updateDataListConsultations(
                                   scheduleController,
                                   observationController,
                                   consultation.consultationId);
-                              if (_confirm) {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text("Confirmation"),
-                                      content: const Text(
-                                          "¿Are you sure you want to exit?"),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: const Text("Cancel"),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        TextButton(
-                                          child: const Text("Accept"),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            Navigator.pushReplacementNamed(
-                                                context, Routes.HOME,
-                                                arguments:
-                                                    _identificationNumber);
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Confirmation"),
+                                    content: const Text(
+                                        "¿Are you sure you want to exit?"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text("Cancel"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text("Accept"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pushReplacementNamed(
+                                              context, Routes.HOME,
+                                              arguments: _identificationNumber);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             color: Colors.blue,
                             iconSize: 40.0,
@@ -229,9 +222,6 @@ class _ShowRegistersViewState extends State<ShowRegistersView> {
                           IconButton(
                             icon: const Icon(Icons.close_rounded),
                             onPressed: () {
-                              if (_fetching) {
-                                const CircularProgressIndicator();
-                              }
                               _deleteDataListConsultations(
                                   consultation.consultationId, index);
                             },
@@ -276,9 +266,6 @@ class _ShowRegistersViewState extends State<ShowRegistersView> {
 
   Future<void> _updateDataListConsultations(TextEditingController schedule,
       TextEditingController observation, int consultationId) async {
-    setState(() {
-      _fetching = true;
-    });
     final EitherConsultationUpdate futureConsultations;
     final consultationsRepository = context.read<ConsultationsRepository>();
     final objUpdateConsultation = {
@@ -297,20 +284,12 @@ class _ShowRegistersViewState extends State<ShowRegistersView> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(message!)));
       },
-      (result) {
-        setState(() {
-          _fetching = false;
-          _confirm = true;
-        });
-      },
+      (result) {},
     );
   }
 
   Future<void> _deleteDataListConsultations(
       int consultationId, int index) async {
-    setState(() {
-      _fetching = true;
-    });
     final EitherConsultationDelete futureConsultations;
     final consultationsRepository = context.read<ConsultationsRepository>();
     futureConsultations =
@@ -331,9 +310,6 @@ class _ShowRegistersViewState extends State<ShowRegistersView> {
         });
         Navigator.pushReplacementNamed(context, Routes.HOME,
             arguments: _identificationNumber);
-        setState(() {
-          _fetching = false;
-        });
       },
     );
   }
