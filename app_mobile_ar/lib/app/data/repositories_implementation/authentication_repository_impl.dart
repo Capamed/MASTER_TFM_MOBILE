@@ -22,8 +22,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         username: username, password: password);
     return response.when((failure) {
       return Either.left(failure);
-    }, (valueBool) {
-      return Either.right(valueBool);
+    }, (identificactionNumber) {
+      return Either.right(identificactionNumber);
     });
   }
 }

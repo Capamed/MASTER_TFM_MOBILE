@@ -1,3 +1,5 @@
+import 'package:app_mobile_ar/app/domain/models/consultation.dart';
+import 'package:app_mobile_ar/app/domain/repositories/consultations_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_ar/main.dart';
 import '../../../routes/routes.dart';
@@ -12,6 +14,8 @@ import '../../../../domain/models/doctor.dart';
 
 typedef EitherListDoctors = Either<SignInFailure, List<Doctor>>;
 typedef EitherListMedications = Either<SignInFailure, List<Medication>>;
+typedef EitherConsultations = Either<SignInFailure, Consultation>;
+typedef EitherConsultationsCreate = Either<SignInFailure, int>;
 
 class RegisterMedicationView extends StatefulWidget {
   const RegisterMedicationView({super.key, required this.identificationNumber});
@@ -25,18 +29,22 @@ class RegisterMedicationView extends StatefulWidget {
 class _RegisterMedicationViewState extends State<RegisterMedicationView> {
   late final Future<EitherListDoctors> _futureDoctors;
   late final Future<EitherListMedications> _futureMedications;
+  late final EitherConsultationsCreate _futureConsultations;
   late String pathMedication;
   String selectedItemDoctor = '1718302951001';
   int selectedItemMedication = 1;
   bool _fetching = false;
   String _amount = '', _schedule = '', _observation = '';
+  late final String _identificationNumber;
 
   @override
   void initState() {
+    _identificationNumber = widget.identificationNumber;
     final doctorsRepository = context.read<DoctorsRepository>();
     _futureDoctors = doctorsRepository.getDataDoctors();
     final medicationsRepository = context.read<MedicationsRepository>();
     _futureMedications = medicationsRepository.getDataMedications();
+
     super.initState();
     pathMedication =
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvCAW6jW4jPwerruXO-aSX_lhsdKQmSx98AV8i19BkMJbgXFkPOe_yjQKYIgKro5QwHvc&usqp=CAU';
@@ -108,7 +116,20 @@ class _RegisterMedicationViewState extends State<RegisterMedicationView> {
                                             final resultServiceAsEither =
                                                 snapshot.data!;
                                             resultServiceAsEither.when(
-                                              (p0) => null,
+                                              (failure) {
+                                                final message = {
+                                                  SignInFailure.notFound:
+                                                      'Not Found',
+                                                  SignInFailure.unauthorized:
+                                                      'Invalid Password',
+                                                  SignInFailure.unknown:
+                                                      'Internal Error',
+                                                }[failure];
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content:
+                                                            Text(message!)));
+                                              },
                                               (result) {
                                                 lstDoctors = result;
                                               },
@@ -182,7 +203,19 @@ class _RegisterMedicationViewState extends State<RegisterMedicationView> {
                                           final resultServiceAsEither =
                                               snapshot.data!;
                                           resultServiceAsEither.when(
-                                            (p0) => null,
+                                            (failure) {
+                                              final message = {
+                                                SignInFailure.notFound:
+                                                    'Not Found',
+                                                SignInFailure.unauthorized:
+                                                    'Invalid Password',
+                                                SignInFailure.unknown:
+                                                    'Internal Error',
+                                              }[failure];
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(message!)));
+                                            },
                                             (result) {
                                               lstMedications = result;
                                             },
@@ -228,48 +261,6 @@ class _RegisterMedicationViewState extends State<RegisterMedicationView> {
                               Row(
                                 children: [
                                   const Text(
-                                    'Amount',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const Text(
-                                    '*',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: TextFormField(
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      onChanged: (text) {
-                                        _amount = text.trim().toLowerCase();
-                                      },
-                                      keyboardType: TextInputType.number,
-                                      decoration: const InputDecoration(
-                                        hintText: 'Type amount',
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15.0)),
-                                        ),
-                                      ),
-                                      validator: (text) {
-                                        text = text?.trim().toLowerCase() ?? '';
-                                        if (text.isEmpty) {
-                                          return 'Invalid amount';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              Row(
-                                children: [
-                                  const Text(
                                     'Schedule',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -291,7 +282,10 @@ class _RegisterMedicationViewState extends State<RegisterMedicationView> {
                                       },
                                       decoration: const InputDecoration(
                                         hintText: 'Type schedule by hours',
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15.0)),),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15.0)),
+                                        ),
                                       ),
                                       validator: (text) {
                                         text = text?.trim().toLowerCase() ?? '';
@@ -409,6 +403,36 @@ class _RegisterMedicationViewState extends State<RegisterMedicationView> {
     setState(() {
       _fetching = true;
     });
-    Navigator.pushReplacementNamed(context, Routes.HOME);
+
+    final consultationsRepository = context.read<ConsultationsRepository>();
+    final register = {
+      'medicationId': selectedItemMedication,
+      'identificationNumber': _identificationNumber,
+      'identificacionNumberDoctor': selectedItemDoctor,
+      'schedule': _schedule,
+      'symbol': 'HOURS',
+      'observation': _observation,
+      'status': 0
+    };
+    _futureConsultations =
+        await consultationsRepository.createNewRegister(register);
+    _futureConsultations.when((failure) {
+      setState(() {
+        _fetching = false;
+      });
+      final message = {
+        SignInFailure.notFound: 'Not Found',
+        SignInFailure.unauthorized: 'Invalid Password',
+        SignInFailure.unknown: 'Internal Error',
+      }[failure];
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message!)));
+    }, (resolve) {
+      setState(() {
+        _fetching = false;
+      });
+      Navigator.pushReplacementNamed(context, Routes.HOME,
+          arguments: _identificationNumber);
+    });
   }
 }

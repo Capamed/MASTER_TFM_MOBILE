@@ -169,11 +169,11 @@ class HomeView extends StatelessWidget {
 
   _goToRegisterMedication(BuildContext context) {
     Navigator.pushReplacementNamed(context, Routes.REGISTER_MEDICATION,
-        arguments: '1718302951');
+        arguments: identificationNumber);
   }
 
   _goToShowRegisters(BuildContext context) {
     Navigator.pushReplacementNamed(context, Routes.SHOW_REGISTERS,
-        arguments: '1718302951');
+        arguments: identificationNumber);
   }
 }

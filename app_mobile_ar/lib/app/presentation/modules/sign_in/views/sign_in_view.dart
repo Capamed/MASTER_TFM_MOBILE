@@ -2,6 +2,9 @@ import 'package:app_mobile_ar/app/domain/enums/enums.dart';
 import 'package:app_mobile_ar/app/presentation/routes/routes.dart';
 import 'package:app_mobile_ar/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../domain/repositories/authentication_repository.dart';
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -223,28 +226,27 @@ class _SignInViewState extends State<SignInView> {
     setState(() {
       _fetching = true;
     });
-    Navigator.pushReplacementNamed(context, Routes.HOME);
-    // final result = await Injector.of(context)
-    //     .authenticationRepository
-    //     .signIn(_username, _password);
 
-    // if (!mounted) {
-    //   return;
-    // }
+    //Navigator.pushReplacementNamed(context, Routes.HOME);
+    final result = await context.read<AuthenticationRepository>().signIn(_username, _password);
 
-    // result.when((failure) {
-    //   setState(() {
-    //     _fetching = false;
-    //   });
-    //   final message = {
-    //     SignInFailure.notFound: 'Not Found',
-    //     SignInFailure.unauthorized: 'Invalid Password',
-    //     SignInFailure.unknown: 'Internal Error',
-    //   }[failure];
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(SnackBar(content: Text(message!)));
-    // }, (user) {
-    //   Navigator.pushReplacementNamed(context, Routes.HOME);
-    // });
+    if (!mounted) {
+      return;
+    }
+
+    result.when((failure) {
+      setState(() {
+        _fetching = false;
+      });
+      final message = {
+        SignInFailure.notFound: 'Not Found',
+        SignInFailure.unauthorized: 'Invalid Password',
+        SignInFailure.unknown: 'Internal Error',
+      }[failure];
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message!)));
+    }, (identificationNumber) {
+      Navigator.pushReplacementNamed(context, Routes.HOME, arguments: identificationNumber);
+    });
   }
 }
